@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import {
   Code2,
@@ -20,10 +20,8 @@ import {
   Sparkles,
   Clock,
   Server,
-  Star,
   Check,
   Send,
-  Building2,
   Globe2,
   Palette,
   Terminal,
@@ -36,16 +34,15 @@ import {
   Database,
   GitBranch,
   Box,
-  Flame,
-  LayoutGrid
+  Flame
 } from 'lucide-react';
-import brandLogo from './assets/logo.png';
-import heroTeamImg from './assets/hero-team.jpg';
-import whoWeAreImg from './assets/who-we-are.jpg';
-import cardStaticWeb from './assets/card-static-web.jpg';
-import cardDynamicApp from './assets/card-dynamic-app.jpg';
-import cardEcommerce from './assets/card-ecommerce.jpg';
-import cardMobileApp from './assets/card-mobile-app.jpg';
+import brandLogo from './assets/logo.webp';
+import heroTeamImg from './assets/hero-team.webp';
+import whoWeAreImg from './assets/who-we-are.webp';
+import cardStaticWeb from './assets/card-static-web.webp';
+import cardDynamicApp from './assets/card-dynamic-app.webp';
+import cardEcommerce from './assets/card-ecommerce.webp';
+import cardMobileApp from './assets/card-mobile-app.webp';
 
 // Exact WhatsApp Official SVG Icon
 function WhatsAppIcon({ className = "w-4 h-4", fill = "currentColor" }) {
@@ -394,11 +391,15 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           
           {/* Logo with Real Emblem */}
-          <button onClick={() => navigateTo('home')} className="flex items-center space-x-3.5 group text-left">
+          <button onClick={() => navigateTo('home')} aria-label="Go to Invito Solution Home" className="flex items-center space-x-3.5 group text-left">
             <div className="relative flex items-center justify-center w-12 h-12 rounded-full p-0.5 bg-white border border-emerald-200 shadow-md group-hover:scale-105 transition-transform duration-300">
               <img
                 src={brandLogo}
                 alt="Invito Solution Logo"
+                width="48"
+                height="48"
+                fetchPriority="high"
+                decoding="async"
                 className="w-full h-full object-contain rounded-full"
               />
             </div>
@@ -418,6 +419,7 @@ export default function App() {
                 <button
                   key={link.id}
                   onClick={() => navigateTo(link.id)}
+                  aria-label={`Navigate to ${link.name}`}
                   className={`text-sm font-semibold transition-all relative py-2 ${
                     isActive ? 'text-emerald-700 font-bold' : 'text-slate-600 hover:text-emerald-600'
                   }`}
@@ -440,6 +442,7 @@ export default function App() {
               href="https://wa.me/918056604838"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Direct WhatsApp Chat with Invito Solution"
               className="flex items-center space-x-2 text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3.5 py-2.5 rounded-full transition-all hover:scale-105 shadow-sm"
             >
               <WhatsAppIcon className="w-4 h-4 text-[#25D366]" fill="#25D366" />
@@ -447,6 +450,7 @@ export default function App() {
             </a>
             <button
               onClick={() => navigateTo('contact')}
+              aria-label="Navigate to Contact Us page"
               className={`relative inline-flex items-center justify-center px-5 py-2.5 text-xs font-bold rounded-full transition-all transform hover:-translate-y-0.5 ${
                 activePage === 'contact'
                   ? 'bg-slate-900 text-white shadow-md'
@@ -461,7 +465,8 @@ export default function App() {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="lg:hidden p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-slate-700 hover:text-emerald-700"
-            aria-label="Toggle navigation menu"
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -481,6 +486,7 @@ export default function App() {
                   <button
                     key={link.id}
                     onClick={() => navigateTo(link.id)}
+                    aria-label={`Navigate to ${link.name}`}
                     className={`text-left text-base font-semibold py-1.5 transition-colors ${
                       activePage === link.id ? 'text-emerald-700 font-bold' : 'text-slate-700 hover:text-emerald-600'
                     }`}
@@ -494,6 +500,7 @@ export default function App() {
                   href="https://wa.me/918056604838"
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="WhatsApp Invito Solution at +91 8056604838"
                   className="flex items-center justify-center space-x-2 py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-bold"
                 >
                   <WhatsAppIcon className="w-4 h-4 text-[#25D366]" fill="#25D366" />
@@ -501,6 +508,7 @@ export default function App() {
                 </a>
                 <button
                   onClick={() => navigateTo('contact')}
+                  aria-label="Navigate to Contact page"
                   className="text-center py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-bold text-sm shadow-md shadow-emerald-600/20"
                 >
                   Contact Us
@@ -530,6 +538,10 @@ export default function App() {
                   <img
                     src={heroTeamImg}
                     alt="Invito Solution Software Engineering Team"
+                    width="1376"
+                    height="768"
+                    fetchPriority="high"
+                    decoding="async"
                     className="w-full h-full object-cover object-center transform scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/80 to-slate-950/85"></div>
@@ -544,7 +556,7 @@ export default function App() {
                     transition={{ duration: 0.6 }}
                     className="inline-flex items-center space-x-2"
                   >
-                    <span className="text-xs sm:text-sm font-bold tracking-widest uppercase text-emerald-300 bg-emerald-950/80 backdrop-blur-md px-4 py-2 rounded-full border border-emerald-500/40 shadow-lg shadow-emerald-900/30">
+                    <span className="text-xs sm:text-sm font-bold tracking-widest uppercase text-emerald-400 font-bold bg-emerald-950/90 backdrop-blur-md px-4 py-2 rounded-full border border-emerald-500/40 shadow-lg shadow-emerald-900/30">
                       NEXT-GEN SOFTWARE & PRODUCT ENGINEERING STUDIO
                     </span>
                   </motion.div>
@@ -581,6 +593,7 @@ export default function App() {
                   >
                     <button
                       onClick={() => navigateTo('contact')}
+                      aria-label="Claim Free Tech Assessment"
                       className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-8 py-4 rounded-xl text-sm font-bold text-slate-950 bg-gradient-to-r from-emerald-400 to-emerald-300 hover:from-emerald-300 hover:to-emerald-200 transition-all shadow-[0_8px_30px_rgba(16,185,129,0.45)] hover:scale-105"
                     >
                       <span>Claim Free Tech Assessment</span>
@@ -588,6 +601,7 @@ export default function App() {
                     </button>
                     <button
                       onClick={() => navigateTo('what-we-do')}
+                      aria-label="Discover What We Build"
                       className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-8 py-4 rounded-xl text-sm font-bold text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all shadow-lg hover:scale-105"
                     >
                       <span>Discover What We Build</span>
@@ -686,7 +700,7 @@ export default function App() {
                         className="bg-white rounded-2xl p-6 border border-emerald-100 shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all text-left group cursor-pointer"
                       >
                         <div className="h-40 rounded-xl overflow-hidden mb-4 relative">
-                          <img src={service.image} alt={service.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                          <img src={service.image} alt={service.title} width="800" height="533" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                           <span className="absolute top-2 right-2 text-[10px] bg-white/95 font-bold px-2 py-0.5 rounded-full text-slate-800 shadow">
                             {service.badge}
                           </span>
@@ -736,7 +750,7 @@ export default function App() {
 
                 {/* 4 Professional Animated Cards with Real Respective Photos */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                  {services.map((service, idx) => (
+                  {services.map((service) => (
                     <motion.div
                       key={service.title}
                       initial={{ opacity: 1, y: 0 }}
@@ -749,6 +763,10 @@ export default function App() {
                         <img
                           src={service.image}
                           alt={service.title}
+                          width="800"
+                          height="533"
+                          loading="lazy"
+                          decoding="async"
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent"></div>
@@ -791,6 +809,7 @@ export default function App() {
                         <div className="pt-4 border-t border-slate-100">
                           <button
                             onClick={() => navigateTo('contact')}
+                            aria-label={`Request consultation for ${service.title}`}
                             className="inline-flex items-center space-x-2 text-xs sm:text-sm font-bold text-emerald-700 hover:text-emerald-800 group-hover:translate-x-1 transition-all"
                           >
                             <span>Request This Service</span>
@@ -813,6 +832,7 @@ export default function App() {
                   </div>
                   <button
                     onClick={() => navigateTo('contact')}
+                    aria-label="Start Free Consultation"
                     className="px-8 py-4 rounded-xl bg-white text-emerald-900 font-bold text-sm shadow-md hover:scale-105 transition-all flex-shrink-0"
                   >
                     Start Free Consultation
@@ -841,6 +861,10 @@ export default function App() {
                       <img
                         src={whoWeAreImg}
                         alt="Who We Are - Invito Solution Engineering Consultation"
+                        width="1200"
+                        height="896"
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-[440px] sm:h-[500px] object-cover group-hover:scale-105 transition-transform duration-700"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"></div>
@@ -890,6 +914,7 @@ export default function App() {
                     <div className="pt-2 flex flex-wrap gap-4">
                       <button
                         onClick={() => navigateTo('our-process')}
+                        aria-label="See Our Delivery Process"
                         className="inline-flex items-center space-x-2 text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-5 py-3 rounded-xl transition-all shadow-sm"
                       >
                         <span>See Our Delivery Process</span>
@@ -897,6 +922,7 @@ export default function App() {
                       </button>
                       <button
                         onClick={() => navigateTo('our-people')}
+                        aria-label="Meet Our Leadership"
                         className="inline-flex items-center space-x-2 text-xs font-bold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 px-5 py-3 rounded-xl transition-all shadow-sm"
                       >
                         <span>Meet Our Leadership</span>
@@ -1045,6 +1071,10 @@ export default function App() {
                         >
                           <button
                             onClick={() => setOpenFaq(isOpen ? -1 : index)}
+                            aria-expanded={isOpen}
+                            aria-controls={`faq-answer-${index}`}
+                            id={`faq-question-${index}`}
+                            aria-label={`Toggle answer for: ${faq.question}`}
                             className="w-full px-6 py-5 flex items-center justify-between text-left font-bold text-slate-900 hover:text-emerald-700 transition-colors"
                           >
                             <span className="text-base sm:text-lg">{faq.question}</span>
@@ -1058,6 +1088,9 @@ export default function App() {
                           <AnimatePresence>
                             {isOpen && (
                               <motion.div
+                                id={`faq-answer-${index}`}
+                                role="region"
+                                aria-labelledby={`faq-question-${index}`}
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
@@ -1155,6 +1188,7 @@ export default function App() {
                               href={project.liveUrl}
                               target="_blank"
                               rel="noopener noreferrer"
+                              aria-label={`Visit live demonstration for ${project.title}`}
                               className="text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 px-4 py-2 rounded-xl transition-all flex items-center space-x-1"
                             >
                               <span>Visit</span>
@@ -1200,7 +1234,11 @@ export default function App() {
                         <div className="w-36 h-36 rounded-3xl bg-white border-2 border-emerald-300 p-2 flex items-center justify-center shadow-lg mx-auto">
                           <img
                             src={brandLogo}
-                            alt="Invito Solution Founder"
+                            alt="Invito Solution Founder and Lead Full-Stack Architect"
+                            width="144"
+                            height="144"
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-contain rounded-2xl"
                           />
                         </div>
@@ -1254,6 +1292,7 @@ export default function App() {
                             href="https://wa.me/918056604838?text=Hi%20Invito%20Solution%2C%20I%20would%20like%20to%20discuss%20a%20technical%20partnership."
                             target="_blank"
                             rel="noopener noreferrer"
+                            aria-label="Direct WhatsApp Consultation with Founder"
                             className="inline-flex items-center space-x-2 text-xs font-bold px-5 py-3 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm transition-colors"
                           >
                             <WhatsAppIcon className="w-4 h-4 text-white" fill="white" />
@@ -1261,6 +1300,7 @@ export default function App() {
                           </a>
                           <a
                             href="tel:+918056604838"
+                            aria-label="Call Founder at +91 8056604838"
                             className="inline-flex items-center space-x-2 text-xs font-bold px-5 py-3 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition-colors"
                           >
                             <Phone className="w-3.5 h-3.5 text-emerald-600" />
@@ -1330,6 +1370,7 @@ export default function App() {
                             href={constructWhatsAppUrl()}
                             target="_blank"
                             rel="noopener noreferrer"
+                            aria-label="Open submitted inquiry directly in WhatsApp"
                             className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-bold text-sm shadow-md hover:scale-105 transition-all"
                           >
                             <WhatsAppIcon className="w-4 h-4 text-white" fill="white" />
@@ -1337,6 +1378,7 @@ export default function App() {
                           </a>
                           <button
                             onClick={() => setFormSubmitted(false)}
+                            aria-label="Submit another requirement"
                             className="text-xs font-semibold text-slate-500 hover:text-emerald-700 underline"
                           >
                             Submit Another Requirement
@@ -1347,11 +1389,13 @@ export default function App() {
                       <form onSubmit={handleFormSubmit} className="space-y-5">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-xs font-bold text-slate-700 mb-2">Your Full Name *</label>
+                            <label htmlFor="contact-name" className="block text-xs font-bold text-slate-700 mb-2">Your Full Name *</label>
                             <input
+                              id="contact-name"
                               type="text"
                               name="name"
                               required
+                              aria-required="true"
                               value={formData.name}
                               onChange={handleInputChange}
                               placeholder="Rahul Sharma"
@@ -1359,11 +1403,13 @@ export default function App() {
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-bold text-slate-700 mb-2">WhatsApp / Phone *</label>
+                            <label htmlFor="contact-phone" className="block text-xs font-bold text-slate-700 mb-2">WhatsApp / Phone *</label>
                             <input
+                              id="contact-phone"
                               type="tel"
                               name="phone"
                               required
+                              aria-required="true"
                               value={formData.phone}
                               onChange={handleInputChange}
                               placeholder="+91 98765 43210"
@@ -1374,11 +1420,13 @@ export default function App() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-xs font-bold text-slate-700 mb-2">Corporate Email *</label>
+                            <label htmlFor="contact-email" className="block text-xs font-bold text-slate-700 mb-2">Corporate Email *</label>
                             <input
+                              id="contact-email"
                               type="email"
                               name="email"
                               required
+                              aria-required="true"
                               value={formData.email}
                               onChange={handleInputChange}
                               placeholder="rahul@company.com"
@@ -1386,8 +1434,9 @@ export default function App() {
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-bold text-slate-700 mb-2">Company / Organization</label>
+                            <label htmlFor="contact-company" className="block text-xs font-bold text-slate-700 mb-2">Company / Organization</label>
                             <input
+                              id="contact-company"
                               type="text"
                               name="company"
                               value={formData.company}
@@ -1411,6 +1460,8 @@ export default function App() {
                                 type="button"
                                 key={type}
                                 onClick={() => setFormData((prev) => ({ ...prev, projectType: type }))}
+                                aria-label={`Select project scope: ${type}`}
+                                aria-pressed={formData.projectType === type}
                                 className={`px-3 py-2.5 rounded-xl text-xs font-semibold border text-center transition-all ${
                                   formData.projectType === type
                                     ? 'bg-emerald-50 border-emerald-500 text-emerald-800 shadow-sm ring-1 ring-emerald-500'
@@ -1436,6 +1487,8 @@ export default function App() {
                                 type="button"
                                 key={budget}
                                 onClick={() => setFormData((prev) => ({ ...prev, budget }))}
+                                aria-label={`Select budget range: ${budget}`}
+                                aria-pressed={formData.budget === budget}
                                 className={`px-3 py-2.5 rounded-xl text-xs font-semibold border text-center transition-all ${
                                   formData.budget === budget
                                     ? 'bg-emerald-50 border-emerald-500 text-emerald-800 shadow-sm ring-1 ring-emerald-500'
@@ -1449,8 +1502,9 @@ export default function App() {
                         </div>
 
                         <div>
-                          <label className="block text-xs font-bold text-slate-700 mb-2">Project Brief & Feature Requirements</label>
+                          <label htmlFor="contact-brief" className="block text-xs font-bold text-slate-700 mb-2">Project Brief & Feature Requirements</label>
                           <textarea
+                            id="contact-brief"
                             name="brief"
                             rows={3}
                             value={formData.brief}
@@ -1465,6 +1519,7 @@ export default function App() {
                             href={constructWhatsAppUrl()}
                             target="_blank"
                             rel="noopener noreferrer"
+                            aria-label="Send inquiry directly via WhatsApp"
                             className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-5 py-3 rounded-xl bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 text-xs font-bold transition-all shadow-sm"
                           >
                             <MessageCircle className="w-4 h-4 text-emerald-600" />
@@ -1473,6 +1528,7 @@ export default function App() {
                           <button
                             type="submit"
                             disabled={isSubmitting}
+                            aria-label="Submit project consultation inquiry"
                             className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-7 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-bold text-xs shadow-md shadow-emerald-500/20 hover:scale-105 transition-all disabled:opacity-70"
                           >
                             {isSubmitting ? (
@@ -1500,7 +1556,7 @@ export default function App() {
                       <div className="p-3.5 rounded-xl bg-slate-50 border border-emerald-100 shadow-xs flex items-center justify-between">
                         <div>
                           <div className="text-[10px] uppercase tracking-wider text-emerald-700 font-bold">Primary Contact</div>
-                          <a href="tel:+918056604838" className="text-sm font-bold text-slate-900 hover:text-emerald-700">
+                          <a href="tel:+918056604838" aria-label="Call primary phone +91 8056604838" className="text-sm font-bold text-slate-900 hover:text-emerald-700">
                             +91 8056604838
                           </a>
                         </div>
@@ -1508,6 +1564,7 @@ export default function App() {
                           href="https://wa.me/918056604838"
                           target="_blank"
                           rel="noopener noreferrer"
+                          aria-label="Chat on WhatsApp with primary contact +91 8056604838"
                           className="p-2 rounded-lg bg-emerald-50 text-[#25D366] hover:bg-[#25D366] hover:text-white transition-colors"
                         >
                           <WhatsAppIcon className="w-4 h-4" />
@@ -1517,7 +1574,7 @@ export default function App() {
                       <div className="p-3.5 rounded-xl bg-slate-50 border border-emerald-100 shadow-xs flex items-center justify-between">
                         <div>
                           <div className="text-[10px] uppercase tracking-wider text-emerald-700 font-bold">Secondary Line</div>
-                          <a href="tel:+919600471080" className="text-sm font-bold text-slate-900 hover:text-emerald-700">
+                          <a href="tel:+919600471080" aria-label="Call secondary phone +91 9600471080" className="text-sm font-bold text-slate-900 hover:text-emerald-700">
                             +91 9600471080
                           </a>
                         </div>
@@ -1525,6 +1582,7 @@ export default function App() {
                           href="https://wa.me/919600471080"
                           target="_blank"
                           rel="noopener noreferrer"
+                          aria-label="Chat on WhatsApp with secondary contact +91 9600471080"
                           className="p-2 rounded-lg bg-emerald-50 text-[#25D366] hover:bg-[#25D366] hover:text-white transition-colors"
                         >
                           <WhatsAppIcon className="w-4 h-4" />
@@ -1533,7 +1591,7 @@ export default function App() {
 
                       <div className="p-3.5 rounded-xl bg-slate-50 border border-emerald-100 shadow-xs">
                         <div className="text-[10px] uppercase tracking-wider text-emerald-700 font-bold">Official Email</div>
-                        <a href="mailto:invitosolution@gmail.com" className="text-sm font-bold text-slate-900 hover:text-emerald-700">
+                        <a href="mailto:invitosolution@gmail.com" aria-label="Send email to invitosolution@gmail.com" className="text-sm font-bold text-slate-900 hover:text-emerald-700">
                           invitosolution@gmail.com
                         </a>
                       </div>
@@ -1549,6 +1607,7 @@ export default function App() {
                           href="https://maps.google.com/?q=Melapalayam,Tirunelveli,Tamil+Nadu+627005"
                           target="_blank"
                           rel="noopener noreferrer"
+                          aria-label="View Invito Solution location on Google Maps"
                           className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg shadow-xs"
                         >
                           Open Maps
@@ -1584,6 +1643,7 @@ export default function App() {
           href="https://wa.me/918056604838?text=Hi%20Invito%20Solution%2C%20I%20would%20like%20to%20discuss%20a%20new%20project."
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="Open WhatsApp Chat with Invito Solution"
           className="group relative flex items-center space-x-3 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white px-4 py-3 rounded-full shadow-[0_8px_25px_rgba(16,185,129,0.4)] hover:scale-105 transition-all font-bold text-xs"
         >
           <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
@@ -1610,6 +1670,10 @@ export default function App() {
                   <img
                     src={brandLogo}
                     alt="Invito Solution Logo"
+                    width="40"
+                    height="40"
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-contain rounded-full"
                   />
                 </div>
@@ -1632,6 +1696,7 @@ export default function App() {
                   <li key={link.id}>
                     <button
                       onClick={() => navigateTo(link.id)}
+                      aria-label={`Navigate to ${link.name}`}
                       className={`hover:text-emerald-600 transition-colors ${
                         activePage === link.id ? 'text-emerald-700 font-bold' : ''
                       }`}
@@ -1648,7 +1713,7 @@ export default function App() {
               <ul className="space-y-2 text-xs text-slate-600 font-medium">
                 {services.map((s) => (
                   <li key={s.title}>
-                    <button onClick={() => navigateTo('what-we-do')} className="hover:text-emerald-600 transition-colors text-left">
+                    <button onClick={() => navigateTo('what-we-do')} aria-label={`View ${s.title}`} className="hover:text-emerald-600 transition-colors text-left">
                       {s.title}
                     </button>
                   </li>
@@ -1661,15 +1726,15 @@ export default function App() {
               <ul className="space-y-2.5 text-xs text-slate-600 font-medium">
                 <li className="flex items-center space-x-2">
                   <Phone className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                  <a href="tel:+918056604838" className="hover:text-emerald-700">+91 8056604838</a>
+                  <a href="tel:+918056604838" aria-label="Call +91 8056604838" className="hover:text-emerald-700">+91 8056604838</a>
                 </li>
                 <li className="flex items-center space-x-2">
                   <Phone className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                  <a href="tel:+919600471080" className="hover:text-emerald-700">+91 9600471080</a>
+                  <a href="tel:+919600471080" aria-label="Call +91 9600471080" className="hover:text-emerald-700">+91 9600471080</a>
                 </li>
                 <li className="flex items-center space-x-2">
                   <Mail className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                  <a href="mailto:invitosolution@gmail.com" className="hover:text-emerald-700 truncate">invitosolution@gmail.com</a>
+                  <a href="mailto:invitosolution@gmail.com" aria-label="Send email to invitosolution@gmail.com" className="hover:text-emerald-700 truncate">invitosolution@gmail.com</a>
                 </li>
                 <li className="flex items-start space-x-2 text-[11px] text-slate-500 pt-1">
                   <MapPin className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" />
