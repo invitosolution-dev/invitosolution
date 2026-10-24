@@ -34,7 +34,8 @@ import {
   Database,
   GitBranch,
   Box,
-  Flame
+  Flame,
+  AlertCircle
 } from 'lucide-react';
 import brandLogo from './assets/logo.webp';
 import heroTeamImg from './assets/hero-team.webp';
@@ -85,68 +86,79 @@ export default function App() {
   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   // Form State
-  const [formData, setFormData] = useState({
+  const initialFormState = {
     name: '',
-    phone: '',
     email: '',
+    phone: '',
     company: '',
-    projectType: 'Dynamic Web App',
+    project_scope: 'Dynamic Web App',
     budget: '$500 - $1,500 / ₹40k - ₹1.2L',
     referral_code: '',
-    brief: ''
-  });
+    message: ''
+  };
+
+  const [formData, setFormData] = useState(initialFormState);
+  const [submittedData, setSubmittedData] = useState(null);
+  const [submitError, setSubmitError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const finalValue = name === 'referral_code' ? value.toUpperCase() : value;
     setFormData((prev) => ({ ...prev, [name]: finalValue }));
-  };
-
-  const encode = (data) => {
-    return Object.keys(data)
-      .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key] || ''))
-      .join('&');
+    if (submitError) setSubmitError('');
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError('');
+
     try {
-      await fetch('/', {
+      const payload = {
+        'form-name': 'contact',
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.company,
+        project_scope: formData.project_scope,
+        budget: formData.budget,
+        referral_code: formData.referral_code,
+        message: formData.message
+      };
+
+      const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encode({
-          'form-name': 'contact',
-          name: formData.name,
-          phone: formData.phone,
-          email: formData.email,
-          company: formData.company,
-          projectType: formData.projectType,
-          budget: formData.budget,
-          referral_code: formData.referral_code,
-          brief: formData.brief
-        })
+        body: new URLSearchParams(payload).toString()
       });
-      setFormSubmitted(true);
+
+      if (response.ok || response.status === 200) {
+        setSubmittedData({ ...formData });
+        setFormData(initialFormState);
+        setFormSubmitted(true);
+      } else {
+        throw new Error(`Netlify returned status ${response.status}`);
+      }
     } catch (error) {
       console.error('Netlify form submission error:', error);
-      setFormSubmitted(true);
+      setSubmitError('Unable to send inquiry to Netlify at this time. Please try again or reach out directly on WhatsApp.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const constructWhatsAppUrl = () => {
+    const data = submittedData || formData;
     const text = encodeURIComponent(
       `*New Project Lead - Invito Solution*\n\n` +
-      `*Name:* ${formData.name || 'Not provided'}\n` +
-      `*Contact:* ${formData.phone || 'Not provided'}\n` +
-      `*Email:* ${formData.email || 'Not provided'}\n` +
-      `*Company / Brand:* ${formData.company || 'Not provided'}\n` +
-      `*Service:* ${formData.projectType}\n` +
-      `*Budget:* ${formData.budget}\n` +
-      (formData.referral_code ? `*Referral Code:* ${formData.referral_code}\n` : '') +
-      `*Brief:* ${formData.brief || 'Looking to discuss a new digital build.'}`
+      `*Name:* ${data.name || 'Not provided'}\n` +
+      `*Contact:* ${data.phone || 'Not provided'}\n` +
+      `*Email:* ${data.email || 'Not provided'}\n` +
+      `*Company / Brand:* ${data.company || 'Not provided'}\n` +
+      `*Service:* ${data.project_scope}\n` +
+      `*Budget:* ${data.budget}\n` +
+      (data.referral_code ? `*Referral Code:* ${data.referral_code}\n` : '') +
+      `*Brief:* ${data.message || 'Looking to discuss a new digital build.'}`
     );
     return `https://wa.me/918056604838?text=${text}`;
   };
@@ -1391,7 +1403,7 @@ export default function App() {
                         </div>
                         <h3 className="text-2xl font-bold text-slate-900 font-display">Inquiry Successfully Received!</h3>
                         <p className="text-slate-600 text-sm max-w-md mx-auto">
-                          Thank you, <span className="text-emerald-700 font-bold">{formData.name || 'there'}</span>. An engineering consultant from Invito Solution will contact you shortly.
+                          Thank you, <span className="text-emerald-700 font-bold">{submittedData?.name || 'there'}</span>. An engineering consultant from Invito Solution will contact you shortly.
                         </p>
                         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
                           <a
@@ -1407,16 +1419,8 @@ export default function App() {
                           <button
                             onClick={() => {
                               setFormSubmitted(false);
-                              setFormData({
-                                name: '',
-                                phone: '',
-                                email: '',
-                                company: '',
-                                projectType: 'Dynamic Web App',
-                                budget: '$500 - $1,500 / ₹40k - ₹1.2L',
-                                referral_code: '',
-                                brief: ''
-                              });
+                              setSubmitError('');
+                              setFormData(initialFormState);
                             }}
                             aria-label="Submit another requirement"
                             className="text-xs font-semibold text-slate-500 hover:text-emerald-700 underline"
@@ -1434,13 +1438,11 @@ export default function App() {
                         onSubmit={handleFormSubmit}
                         className="space-y-5"
                       >
-                        {/* Hidden Inputs for Netlify Form Submission */}
+                        {/* Hidden input as the first child of the form */}
                         <input type="hidden" name="form-name" value="contact" />
-                        <p className="hidden">
-                          <label>
-                            Don’t fill this out if you're human: <input name="bot-field" />
-                          </label>
-                        </p>
+                        <input type="hidden" name="bot-field" />
+                        <input type="hidden" name="project_scope" value={formData.project_scope} />
+                        <input type="hidden" name="budget" value={formData.budget} />
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
@@ -1514,11 +1516,11 @@ export default function App() {
                               <button
                                 type="button"
                                 key={type}
-                                onClick={() => setFormData((prev) => ({ ...prev, projectType: type }))}
+                                onClick={() => setFormData((prev) => ({ ...prev, project_scope: type }))}
                                 aria-label={`Select project scope: ${type}`}
-                                aria-pressed={formData.projectType === type}
+                                aria-pressed={formData.project_scope === type}
                                 className={`px-3 py-2.5 rounded-xl text-xs font-semibold border text-center transition-all ${
-                                  formData.projectType === type
+                                  formData.project_scope === type
                                     ? 'bg-emerald-50 border-emerald-500 text-emerald-800 shadow-sm ring-1 ring-emerald-500'
                                     : 'bg-[#f8fafc] border-slate-200 text-slate-600 hover:bg-slate-100'
                                 }`}
@@ -1570,17 +1572,24 @@ export default function App() {
                         </div>
 
                         <div>
-                          <label htmlFor="contact-brief" className="block text-xs font-bold text-slate-700 mb-2">Project Brief & Feature Requirements</label>
+                          <label htmlFor="contact-message" className="block text-xs font-bold text-slate-700 mb-2">Project Brief & Feature Requirements</label>
                           <textarea
-                            id="contact-brief"
-                            name="brief"
+                            id="contact-message"
+                            name="message"
                             rows={3}
-                            value={formData.brief}
+                            value={formData.message}
                             onChange={handleInputChange}
                             placeholder="Tell us about your brand, key features needed, reference websites, or target timeline..."
                             className="w-full bg-[#f8fafc] border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all shadow-xs"
                           ></textarea>
                         </div>
+
+                        {submitError && (
+                          <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center space-x-2">
+                            <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                            <span>{submitError}</span>
+                          </div>
+                        )}
 
                         <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
                           <a

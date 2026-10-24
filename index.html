@@ -38,15 +38,15 @@
   </head>
   <body class="bg-white text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
     <!-- Netlify Form Detection for SPA Pre-processing -->
-    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+    <form name="contact" netlify data-netlify="true" netlify-honeypot="bot-field" hidden>
       <input type="text" name="name" />
-      <input type="tel" name="phone" />
       <input type="email" name="email" />
+      <input type="tel" name="phone" />
       <input type="text" name="company" />
-      <input type="text" name="projectType" />
+      <input type="text" name="project_scope" />
       <input type="text" name="budget" />
       <input type="text" name="referral_code" />
-      <textarea name="brief"></textarea>
+      <textarea name="message"></textarea>
     </form>
 
     <div id="root"></div>
