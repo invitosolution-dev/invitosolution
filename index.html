@@ -29,13 +29,26 @@
     <!-- Preload Primary Hero Visual (LCP Optimization) -->
     <link rel="preload" as="image" href="/hero-team.webp" type="image/webp" fetchpriority="high" />
     
-    <!-- Optimized Vector & Lightweight Icons -->
+    <!-- Invito Solution Brand Favicons & Touch Icons -->
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="alternate icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#ffffff" />
   </head>
   <body class="bg-white text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
+    <!-- Netlify Form Detection for SPA Pre-processing -->
+    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="tel" name="phone" />
+      <input type="email" name="email" />
+      <input type="text" name="company" />
+      <input type="text" name="projectType" />
+      <input type="text" name="budget" />
+      <input type="text" name="referral_code" />
+      <textarea name="brief"></textarea>
+    </form>
+
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

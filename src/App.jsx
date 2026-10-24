@@ -92,21 +92,48 @@ export default function App() {
     company: '',
     projectType: 'Dynamic Web App',
     budget: '$500 - $1,500 / ₹40k - ₹1.2L',
+    referral_code: '',
     brief: ''
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const finalValue = name === 'referral_code' ? value.toUpperCase() : value;
+    setFormData((prev) => ({ ...prev, [name]: finalValue }));
   };
 
-  const handleFormSubmit = (e) => {
+  const encode = (data) => {
+    return Object.keys(data)
+      .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key] || ''))
+      .join('&');
+  };
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encode({
+          'form-name': 'contact',
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          company: formData.company,
+          projectType: formData.projectType,
+          budget: formData.budget,
+          referral_code: formData.referral_code,
+          brief: formData.brief
+        })
+      });
       setFormSubmitted(true);
-    }, 900);
+    } catch (error) {
+      console.error('Netlify form submission error:', error);
+      setFormSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const constructWhatsAppUrl = () => {
@@ -118,6 +145,7 @@ export default function App() {
       `*Company / Brand:* ${formData.company || 'Not provided'}\n` +
       `*Service:* ${formData.projectType}\n` +
       `*Budget:* ${formData.budget}\n` +
+      (formData.referral_code ? `*Referral Code:* ${formData.referral_code}\n` : '') +
       `*Brief:* ${formData.brief || 'Looking to discuss a new digital build.'}`
     );
     return `https://wa.me/918056604838?text=${text}`;
@@ -1377,7 +1405,19 @@ export default function App() {
                             <span>Open Chat in WhatsApp</span>
                           </a>
                           <button
-                            onClick={() => setFormSubmitted(false)}
+                            onClick={() => {
+                              setFormSubmitted(false);
+                              setFormData({
+                                name: '',
+                                phone: '',
+                                email: '',
+                                company: '',
+                                projectType: 'Dynamic Web App',
+                                budget: '$500 - $1,500 / ₹40k - ₹1.2L',
+                                referral_code: '',
+                                brief: ''
+                              });
+                            }}
                             aria-label="Submit another requirement"
                             className="text-xs font-semibold text-slate-500 hover:text-emerald-700 underline"
                           >
@@ -1386,7 +1426,22 @@ export default function App() {
                         </div>
                       </motion.div>
                     ) : (
-                      <form onSubmit={handleFormSubmit} className="space-y-5">
+                      <form
+                        name="contact"
+                        method="POST"
+                        data-netlify="true"
+                        data-netlify-honeypot="bot-field"
+                        onSubmit={handleFormSubmit}
+                        className="space-y-5"
+                      >
+                        {/* Hidden Inputs for Netlify Form Submission */}
+                        <input type="hidden" name="form-name" value="contact" />
+                        <p className="hidden">
+                          <label>
+                            Don’t fill this out if you're human: <input name="bot-field" />
+                          </label>
+                        </p>
+
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
                             <label htmlFor="contact-name" className="block text-xs font-bold text-slate-700 mb-2">Your Full Name *</label>
@@ -1499,6 +1554,19 @@ export default function App() {
                               </button>
                             ))}
                           </div>
+                        </div>
+
+                        <div>
+                          <label htmlFor="contact-referral" className="block text-xs font-bold text-slate-700 mb-2">Referral Code / Referrer Name (Optional)</label>
+                          <input
+                            id="contact-referral"
+                            type="text"
+                            name="referral_code"
+                            value={formData.referral_code}
+                            onChange={handleInputChange}
+                            placeholder="e.g., INVITO20 or Referrer Name"
+                            className="w-full bg-[#f8fafc] border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all shadow-xs uppercase tracking-wide"
+                          />
                         </div>
 
                         <div>
