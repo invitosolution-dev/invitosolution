@@ -1434,13 +1434,11 @@ export default function App() {
                         name="contact"
                         method="POST"
                         data-netlify="true"
-                        data-netlify-honeypot="bot-field"
                         onSubmit={handleFormSubmit}
                         className="space-y-5"
                       >
                         {/* Hidden input as the first child of the form */}
                         <input type="hidden" name="form-name" value="contact" />
-                        <input type="hidden" name="bot-field" />
                         <input type="hidden" name="project_scope" value={formData.project_scope} />
                         <input type="hidden" name="budget" value={formData.budget} />
 
